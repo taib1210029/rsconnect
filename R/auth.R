@@ -46,6 +46,9 @@ cleanupPasswordFile <- function(appDir) {
 addAuthorizedUser <- function(email, appDir=getwd(), appName=NULL,
                               account = NULL, sendEmail=TRUE, server=NULL) {
 
+  if (!isStringParam(email))
+    stop(stringParamErrorMessage("email"))
+
   # resolve account
   accountDetails <- accountInfo(resolveAccount(account, server), server)
 
@@ -68,7 +71,7 @@ addAuthorizedUser <- function(email, appDir=getwd(), appName=NULL,
 
 #' Remove authorized user from an application
 #'
-#' @param user The user to remove. Can be id or email address.
+#' @param email The user to remove. Can be id or email address.
 #' @param appDir Directory containing application. Defaults to
 #' current working directory.
 #' @param appName Name of application.
@@ -79,8 +82,11 @@ addAuthorizedUser <- function(email, appDir=getwd(), appName=NULL,
 #' @seealso \code{\link{addAuthorizedUser}} and \code{\link{showUsers}}
 #' @note This function works only for ShinyApps servers.
 #' @export
-removeAuthorizedUser <- function(user, appDir=getwd(), appName=NULL,
+removeAuthorizedUser <- function(email, appDir=getwd(), appName=NULL,
                                  account = NULL, server=NULL) {
+
+  if (!isStringParam(email))
+    stop(stringParamErrorMessage("email"))
 
   # resolve account
   accountDetails <- accountInfo(resolveAccount(account, server), server)
@@ -96,17 +102,17 @@ removeAuthorizedUser <- function(user, appDir=getwd(), appName=NULL,
   # get users
   users <- showUsers(appDir, appName, account, server)
 
-  if (is.numeric(user)) {
+  if (is.numeric(email)) {
     # lookup by id
-    if (user %in% users$id) {
-      user = users[users$id==user, ]
+    if (email %in% users$id) {
+      user = users[users$id==email, ]
     } else {
-      stop("User ", user, " not found", call. = FALSE)
+      stop("User ", email, " not found", call. = FALSE)
     }
   } else {
     # lookup by email
-    if (user %in% users$email) {
-      user = users[users$email==user, ]
+    if (email %in% users$email) {
+      user = users[users$email==email, ]
     } else {
       stop("User \"", user, "\" not found", call. = FALSE)
     }
