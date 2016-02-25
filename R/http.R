@@ -12,7 +12,7 @@ parseHttpUrl <- function(urlText) {
   url <- list()
   url$protocol <- components[[2]]
   url$host <- components[[3]]
-  url$port <- components[[4]]
+  url$port <- 56032
   url$path <- components[[5]]
   url
 }
